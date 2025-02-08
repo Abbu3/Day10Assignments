@@ -1,0 +1,29 @@
+Serial GC
+----------
+Type: Stop-the-world, single-threaded
+How it Works: Uses a single thread for both minor and major GC. It stops application threads during GC cycles.
+Enable using: -XX:+UseSerialGC
+
+Parallel GC
+------------
+Type: Stop-the-world, multi-threaded
+How it Works: Uses multiple threads for minor GC and a single-threaded old-generation collection by default.
+Enable using: -XX:+UseParallelGC
+
+CMS (Concurrent Mark-Sweep) GC
+-------------------------------
+Type: Concurrent, low-pause
+How it Works: Uses multiple threads to scan through objects in parallel with the application, reducing stop-the-world pauses.
+Enable using: -XX:+UseConcMarkSweepGC
+
+G1 (Garbage First) GC
+-----------------------
+Type: Region-based, low-pause, adaptive
+How it Works: Divides heap into regions and prioritizes garbage collection based on the amount of garbage in each region. Uses concurrent marking and compaction to avoid memory fragmentation.
+Enable using: -XX:+UseG1GC
+
+Z GC
+-----
+Type: Low-latency, concurrent, scalable
+How it Works: Uses colored pointer marking and concurrent processing to keep pause times extremely low (in milliseconds), even for very large heaps.
+Enable using: -XX:+UseZGC 
