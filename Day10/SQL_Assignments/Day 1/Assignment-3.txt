@@ -1,0 +1,75 @@
+ACID Properties of a Transaction:
+
+Atomicity: A transaction is all-or-nothing. If any part of the transaction fails, the entire transaction is rolled back, ensuring that the database remains in a consistent state.
+
+Consistency: A transaction transforms the database from one valid state to another valid state, maintaining all constraints and rules.
+
+Isolation: Transactions execute independently. The effects of an ongoing transaction are not visible to others until it is committed, depending on the isolation level.
+
+Durability: Once a transaction is committed, its changes are permanently stored in the database, even in case of system failures.
+
+
+
+SQL Transaction Simulation with Locking and Isolation Levels
+
+
+
+
+Step 1: Create a Sample Table
+
+CREATE TABLE accounts (
+    id INT PRIMARY KEY,
+    name VARCHAR(50),
+    balance DECIMAL(10,2)
+);
+
+INSERT INTO accounts (id, name, balance) VALUES
+(1, 'JOHN', 1000.00),
+(2, 'KING', 1500.00);
+
+
+
+Step 2: Transaction with Explicit Locking
+
+START TRANSACTION;
+
+SELECT balance FROM accounts WHERE id = 1 FOR UPDATE;
+
+
+UPDATE accounts SET balance = balance - 100 WHERE id = 1;
+UPDATE accounts SET balance = balance + 100 WHERE id = 2;
+
+COMMIT;
+
+
+
+Step 3: Demonstrating Different Isolation Levels
+
+SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;
+
+START TRANSACTION;
+SELECT * FROM accounts;
+COMMIT;
+
+
+SET TRANSACTION ISOLATION LEVEL READ COMMITTED;
+
+START TRANSACTION;
+SELECT * FROM accounts;
+COMMIT;
+
+
+SET TRANSACTION ISOLATION LEVEL REPEATABLE READ;
+
+START TRANSACTION;
+SELECT * FROM accounts;
+COMMIT;
+
+
+SET TRANSACTION ISOLATION LEVEL SERIALIZABLE;
+
+START TRANSACTION;
+SELECT * FROM accounts;
+COMMIT;
+
+

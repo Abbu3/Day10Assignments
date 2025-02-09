@@ -1,0 +1,61 @@
+1) select * from customer;
+
+
+	select customer_name, customer_email from customer where city = 'Hyderabad';
+
+
+2) select c.customer_name from customer c inner join orders o on c.customer_id = o.customer_id where c.region = 'Hyderabad';
+
+
+	select * from customer c left join orders o on c.customer_id = o.customer_id;
+
+
+3) select customer_id, customer_name, 'High Value' AS category from customers where customer_id in (
+    select customer_id from orders 
+    group by customer_id having avg(order_total) > (select avg(order_total) from orders)
+)
+  UNION
+  select customer_id, customer_name, 'Regular' AS category from customers where customer_id not in (
+    select customer_id from orders group by customer_id having avg(order_total) > (select avg(order_total) from orders)
+);
+
+
+4) insert into orders values(1, 'Clothes', 672.56);
+	commit;
+	update orders set orders_name = 'Toys' where order_id = 1;
+	rollback; 
+
+5) insert into orders values(1, 'Biriyani', 472.56);
+	savepoint s1;
+	insert into orders values(2, 'Toys', 322.56);
+	savepoint s2;
+	insert into orders values(3, 'Clothes', 7452.12);
+	savepoint s3;
+
+	rollback to s2;
+	
+	commit;
+
+
+
+6) Report on the Use of Transaction Logs for Data Recovery
+
+Introduction
+Transaction logs play a critical role in ensuring data integrity and recovery in database management systems. These logs record all database transactions, enabling the system to restore data to a consistent state in the event of unexpected failures, such as power outages or system crashes.
+
+Role of Transaction Logs in Data Recovery
+Transaction logs maintain a sequential record of all changes made to a database. Each log entry typically includes the transaction ID, timestamp, type of operation (insert, update, delete), and the before-and-after state of the data. This detailed logging allows for several key recovery operations:
+
+1. Redo Operations: If a transaction was committed before failure but the changes were not fully written to the database, the transaction log enables re-execution of the changes.
+2. Undo Operations: If a transaction was incomplete at the time of failure, the log enables rolling back uncommitted changes to maintain database consistency.
+3. Point-in-Time Recovery: By applying transaction logs up to a specific time, organizations can restore their database to a precise moment before failure.
+
+Hypothetical Scenario: Transaction Log in Data Recovery
+ABC Corporation operates an e-commerce platform that processes thousands of transactions daily. One afternoon, a sudden power outage causes the database server to shut down unexpectedly. When power is restored, the database is found to be in an inconsistent state, with some orders missing and others partially recorded.
+
+Using the transaction log, the database administrator initiates the recovery process:
+- Undo Phase: The system identifies transactions that were incomplete at the time of failure and rolls them back to prevent corruption.
+- Redo Phase: The administrator applies committed transactions that had not been fully written to the database to ensure all completed orders are restored.
+- Verification: The database is checked for integrity, ensuring that no duplicate or inconsistent entries exist.
+	
+
