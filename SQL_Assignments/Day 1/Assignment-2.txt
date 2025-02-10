@@ -1,0 +1,65 @@
+CREATE DATABASE LibraryDB;
+
+SHOW databases;
+
+USE LibraryDB;
+
+
+CREATE TABLE Users (
+    user_id INT PRIMARY KEY AUTO_INCREMENT,
+    first_name VARCHAR(50) NOT NULL,
+    last_name VARCHAR(50) NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    phone_number VARCHAR(15) UNIQUE,
+    address TEXT NOT NULL,
+    membership_date DATE NOT NULL  
+);
+
+
+
+CREATE TABLE Books (
+    book_id INT(4) PRIMARY KEY AUTO_INCREMENT,
+    title VARCHAR(40) NOT NULL,
+    author VARCHAR(40) NOT NULL,
+    isbn VARCHAR(20) UNIQUE NOT NULL,
+    genre VARCHAR(50),
+    published_year INT CHECK (published_year >= 1994),
+    total_copies INT NOT NULL CHECK (total_copies > 0),
+    available_copies INT NOT NULL CHECK (available_copies >= 0)
+);
+
+
+CREATE TABLE Borrowings (
+    borrowing_id INT(5) PRIMARY KEY AUTO_INCREMENT,
+    user_id INT NOT NULL,
+    book_id INT NOT NULL,
+    borrow_date DATE NOT NULL,
+    due_date DATE NOT NULL,
+    return_date DATE,
+    CONSTRAINT chk_due_date CHECK (due_date > borrow_date),
+    FOREIGN KEY (user_id) REFERENCES Users(user_id) ON DELETE CASCADE,
+    FOREIGN KEY (book_id) REFERENCES Books(book_id) ON DELETE CASCADE
+);
+
+
+CREATE TABLE Librarians (
+    librarian_id INT PRIMARY KEY AUTO_INCREMENT,
+    first_name VARCHAR(50) NOT NULL,
+    last_name VARCHAR(50) NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    phone_number VARCHAR(15) UNIQUE NOT NULL,
+    hire_date DATE NOT NULL
+);
+
+
+CREATE TABLE Transactions (
+    transaction_id INT(5) PRIMARY KEY AUTO_INCREMENT,
+    borrowing_id INT(5) NOT NULL,
+    book_issue_date date NOT NULL,
+    due_date date NOT NULL,
+    transaction_type ENUM('BORROW', 'RETURN') NOT NULL,
+    FOREIGN KEY (borrowing_id) REFERENCES Borrowings(borrowing_id) ON DELETE CASCADE
+);
+
+
+SHOW tables;
