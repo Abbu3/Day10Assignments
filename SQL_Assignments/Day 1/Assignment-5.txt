@@ -1,9 +1,0 @@
-CREATE INDEX idx_books_isbn ON Books(isbn);
-
-SHOW INDEX FROM Books;
-
-SELECT * FROM Books WHERE isbn = '9780061120084';
-
-
-DROP INDEX idx_books_isbn ON Books;
-SHOW INDEX FROM Books;
