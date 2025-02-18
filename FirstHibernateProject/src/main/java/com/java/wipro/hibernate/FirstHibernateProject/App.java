@@ -2,10 +2,12 @@ package com.java.wipro.hibernate.FirstHibernateProject;
 
 import java.util.List;
 
+import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.criterion.Restrictions;
 import org.hibernate.query.NativeQuery;
 import org.hibernate.query.Query;
 
@@ -127,6 +129,9 @@ public class App
         
        */
         
+        
+        Criteria c1 = openSession.createCriteria(Student.class);
+       
         
         beginTransaction.commit();
         
